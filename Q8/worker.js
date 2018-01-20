@@ -4,16 +4,16 @@ self.addEventListener(
     var data = event.data;
     switch (data.cmd) {
       case "start":
-        self.postMessage("WORKER STARTED: " + data.msg);
+        self.postMessage(`Worker Initialised. Message: '${data.msg}'`);
         break;
       case "stop":
         self.postMessage(
-          `WORKER STOPPED: ${data.msg}. (buttons will no longer work)`
+          `Worker Destroyed. Message: '${data.msg}' (Buttons are no longer working)`
         );
-        self.close(); // Terminates the worker.
+        self.close();
         break;
       default:
-        self.postMessage("Unknown command: " + data.msg);
+        self.postMessage(`Unknown message: '${data.msg}'`);
     }
   },
   false

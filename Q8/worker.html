@@ -9,26 +9,37 @@
 </head>
 
 <body>
-    <button onclick="sayHI()">Say HI</button>
-    <button onclick="unknownCmd()">Send unknown command</button>
-    <button onclick="stop()">Stop worker</button><br>
+    <input type="text" id='message' value="Hello World">
+    <button id="hello">Send Message</button>
+    <button id="foo">Send unknown command</button>
+    <button id="stop">Stop worker</button>
+    <br>
     <output id="result"></output>
 
     <script>
-        function sayHI() {
-            worker.postMessage({ 'cmd': 'start', 'msg': 'Hi' });
-        }
-
-        function stop() {
-            worker.postMessage({ 'cmd': 'stop', 'msg': 'Bye' });
-        }
-
-        function unknownCmd() {
-            worker.postMessage({ 'cmd': 'foobar', 'msg': '???' });
-        }
-
         var worker = new Worker('worker.js');
+        var btnSayHi = document.getElementById('hello');
+        var btnFoo = document.getElementById('foo');
+        var btnStop = document.getElementById('stop');
 
+        btnSayHi.addEventListener('click', () => {
+            var message = document.getElementById('message').value;
+            (message) ? worker.postMessage({
+                'cmd': 'start',
+                'msg': message
+            }): worker.postMessage({
+                'cmd': 'start',
+                'msg': 'No message provided'
+            })
+        });
+        btnFoo.addEventListener('click', () => worker.postMessage({
+            'cmd': 'foobar',
+            'msg': '???'
+        }));
+        btnStop.addEventListener('click', () => worker.postMessage({
+            'cmd': 'stop',
+            'msg': 'Good Bye!'
+        }));
         worker.addEventListener('message', function (e) {
             document.getElementById('result').textContent = e.data;
         }, false);
